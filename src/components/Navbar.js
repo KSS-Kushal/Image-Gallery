@@ -1,8 +1,14 @@
 import React, { Fragment } from 'react'
 import Button from './elements/Button'
 import { Link } from 'react-router-dom'
+import { useCookies } from 'react-cookie';
 
-const Navbar = ({title}) => {
+const Navbar = ({ title, isLoggedIn, setisLoggedIn }) => {
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const logOut = ()=>{
+    setisLoggedIn(false);
+    removeCookie("authToken");
+  }
   return (
     <Fragment>
       <header className="body-font">
@@ -15,9 +21,15 @@ const Navbar = ({title}) => {
             <Link to={'/facerecognition'} className="mr-5 hover:text-dark text-mid-dark cursor-pointer">Face Recognition</Link>
             <Link to={'/about'} className="mr-5 hover:text-dark text-mid-dark cursor-pointer">About</Link>
           </nav>
-          <Button
-            text={"Login"}
-            arow={true} />
+          {!isLoggedIn ? <Link to={'/login'}>
+            <Button
+              text={"Login"}
+              arow={true} />
+          </Link> :
+            <Button
+              text={"Log out"}
+              onClick={logOut}
+              arow={true} />}
         </div>
       </header>
     </Fragment>
