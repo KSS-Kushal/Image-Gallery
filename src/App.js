@@ -6,6 +6,7 @@ import About from './components/About';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import { useCookies } from 'react-cookie';
+import UploadImage from './components/UploadImage';
 
 function App() {
   const navigate = useNavigate();
@@ -24,9 +25,7 @@ function App() {
           "auth-token": cookies.authToken
         }
       });
-      console.log(response)
       let data = await response.json();
-      console.log(data)
       if (data.success) {
         setisLoggedIn(true);
         setUser({name: data.user.name, phone: data.user.phone, email: data.user.email});
@@ -35,14 +34,16 @@ function App() {
     if (cookies.authToken) {
       checkLogin();
     }
-  }, [])
+  }, [navigate])
 
 
   useEffect(() => {
     // Checking if user is not loggedIn
+    console.log(isLoggedIn)
     if (!isLoggedIn) {
       navigate("/login");
-    }else if(location.pathname === '/signup'){
+    }
+    if(location.pathname === '/signup'){
       navigate("/signup");
     }
   }, [navigate, isLoggedIn]);
@@ -52,7 +53,8 @@ function App() {
         <Route exact path='/' element={< Home user={user} isLoggedIn={isLoggedIn} setisLoggedIn={setisLoggedIn} />}></Route>
         <Route exact path='/login' element={< Login isLoggedIn={isLoggedIn} setisLoggedIn={setisLoggedIn}/>}></Route>
         <Route exact path='/signup' element={< SignUp isLoggedIn={isLoggedIn} setisLoggedIn={setisLoggedIn} />}></Route>
-        <Route exact path='/facerecognition' element={< FaceRecognition />}></Route>
+        <Route exact path='/uploadimage' element={< UploadImage isLoggedIn={isLoggedIn} setisLoggedIn={setisLoggedIn} />}></Route>
+        <Route exact path='/facerecognition' element={< FaceRecognition isLoggedIn={isLoggedIn} />}></Route>
         <Route exact path='/about' element={< About />}></Route>
       </Routes>
     // </Fragment>

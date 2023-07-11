@@ -16,6 +16,9 @@ module.exports = {
       backgroundImage:{
         "login":"conic-gradient(from 180deg at 50% 50%, #FFE4D6 0deg, #D6E6FF 85.65deg, #FFEFA4 184.4deg, #D9FFDE 274.94deg, #FFE4D6 360deg);"
       },
+      gridTemplateColumns:{
+        "auto": "repeat(auto-fill, minmax(300px, 1fr));"
+      }
     },
   },
   plugins: [],

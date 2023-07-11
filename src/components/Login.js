@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import FormButton from './elements/FormButton';
 import Input from './elements/Input';
@@ -31,15 +31,20 @@ const Login = ({ isLoggedIn, setisLoggedIn }) => {
                 password: password
             })
         });
-        console.log(response)
         let data = await response.json();
-        console.log(data)
         if (data.success) {
             setCookie("authToken", data.authToken);
             setisLoggedIn(true);
             navigate("/");
         }
     }
+
+    useEffect(() => {
+      if (isLoggedIn) {
+        navigate("/");
+      }
+    }, [isLoggedIn])
+    
 
     return (
         <Fragment>

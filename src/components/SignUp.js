@@ -1,10 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Input from './elements/Input'
 import FormButton from './elements/FormButton'
 import Checkbox from './elements/Checkbox'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 
-const SignUp = () => {
+const SignUp = ({ isLoggedIn, setisLoggedIn }) => {
+    const navigate = useNavigate();
+    const [user, setUser] = useState({ firstName: "", lastName: "", email: "", phone: "", password: "" });
+    const [cookies, setCookie] = useCookies(['user']);
+
+
+    const onChange = (e) => {
+        setUser({ ...user, [e.target.name]: e.target.value })
+    }
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const url = "http://localhost:5000/api/auth/createuser";
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify({
+                name: user.firstName + ' ' + user.lastName,
+                email: user.email,
+                phone: user.phone,
+                password: user.password
+            })
+        });
+        let data = await response.json();
+        if (data.success) {
+            setCookie("authToken", data.authToken);
+            setisLoggedIn(true);
+            navigate("/");
+        }
+    }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate("/");
+        }
+    }, [isLoggedIn])
+
     return (
         <section className="bg-login h-[100vh] -scale-x-100 w-full">
             <div className="-scale-x-100">
@@ -34,13 +74,14 @@ const SignUp = () => {
                         <div className="mx-3 md:ml-28 md:mr-40 2xl:pr-20">
                             <p className="font-para text-sm text-[#949494]">Start for Free</p>
                             <h3 className="font-heading font-medium text-xl">Create new account</h3>
-                            <form action="" className="my-7">
+                            <form onSubmit={handleSubmit} className="my-7">
                                 <div className="flex flex-col md:flex-row md:space-x-3">
-                                    <Input type={"text"} name={"firstName"} placeholder={'First Name'} border={true} />
-                                    <Input type={"text"} name={"lastName"} placeholder={'Last Name'} border={true} />
+                                    <Input type={"text"} name={"firstName"} placeholder={'First Name'} onChange={onChange} value={user.firstName} border={true} />
+                                    <Input type={"text"} name={"lastName"} placeholder={'Last Name'} onChange={onChange} value={user.lastName} border={true} />
                                 </div>
-                                <Input type={"email"} name={"email"} placeholder={"Email"} border={true} />
-                                <Input type={"password"} name={"password"} placeholder={"Password"} border={true} />
+                                <Input type={"email"} name={"email"} placeholder={"Email"} onChange={onChange} value={user.email} border={true} />
+                                <Input type={"tell"} name={"phone"} placeholder={"Phone"} onChange={onChange} value={user.phone} border={true} />
+                                <Input type={"password"} name={"password"} placeholder={"Password"} onChange={onChange} value={user.password} border={true} />
                                 <p className="font-para text-xs text-[#686868]/60 my-2">Must be at least 8 characters</p>
                                 <Checkbox id={"agree"} name={"agree"} label={"I agree to all the Terms & Conditions "} />
                                 <div className="my-6 flex flex-col justify-center items-center">
