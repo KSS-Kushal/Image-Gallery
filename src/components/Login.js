@@ -36,14 +36,15 @@ const Login = ({ isLoggedIn, setisLoggedIn }) => {
             setCookie("authToken", data.authToken);
             setisLoggedIn(true);
             navigate("/");
+            navigate(0);
         }
     }
 
-    useEffect(() => {
-      if (isLoggedIn) {
-        navigate("/");
-      }
-    }, [isLoggedIn])
+    // useEffect(() => {
+    //   if (isLoggedIn) {
+    //     navigate("/");
+    //   }
+    // }, [isLoggedIn])
     
 
     return (
@@ -75,8 +76,22 @@ const Login = ({ isLoggedIn, setisLoggedIn }) => {
                                     <Link to={'/signup'} className={'text-black'}>&nbsp; Sign up</Link>
                                 </p>
                                 <form onSubmit={handleSubmit} className="my-7">
-                                    <Input type={"email"} name={"email"} placeholder={"Email"} border={true} onChange={onChange} value={email} />
-                                    <Input type={"password"} name={"password"} placeholder={"Password"} border={true} onChange={onChange} value={password} />
+                                    <Input
+                                        type={"email"}
+                                        name={"email"}
+                                        placeholder={"Email"}
+                                        isRequired={true}
+                                        border={true}
+                                        onChange={onChange}
+                                        value={email} />
+                                    <Input
+                                        type={"password"}
+                                        name={"password"}
+                                        placeholder={"Password"}
+                                        isRequired={true}
+                                        border={true}
+                                        onChange={onChange}
+                                        value={password} />
                                     <div className="my-2 flex justify-between">
                                         {/* <Checkbox id={"rememberme"} name={"rememberme"} label={"Remember me"} /> */}
                                         <Link to={'/forgotpassword'}>

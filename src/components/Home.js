@@ -38,7 +38,7 @@ const Home = ({ user, isLoggedIn, setisLoggedIn }) => {
             <Navbar title={"Image Gallery"} isLoggedIn={isLoggedIn} setisLoggedIn={setisLoggedIn} />
             {/* Home  */}
             <section className="body-font">
-                <div className="container px-5 py-24 mx-auto">
+                <div className="container px-5 py-16 mx-auto">
                     <div className="flex flex-col text-center w-full mb-20">
                         <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-dark">Wellcome {user.name}</h1>
                         <p className="lg:w-2/3 mx-auto leading-relaxed text-base">Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep jianbing selfies heirloom.</p>
@@ -51,7 +51,7 @@ const Home = ({ user, isLoggedIn, setisLoggedIn }) => {
                     </div>
                     {/* Upload Image */}
                     <Link to={'/uploadimage'}>
-                        <div className="fixed bottom-5 right-5 flex flex-col justify-center items-center bg-light px-6 py-2 rounded-md cursor-pointer">
+                        <div className="fixed bottom-5 right-5 flex flex-col justify-center items-center bg-light px-6 py-2 rounded-md cursor-pointer opacity-30 hover:opacity-100">
                             <BiSolidCloudUpload className='text-4xl text-mid-dark' />
                             <p className="text-mid-dark text-base font-medium">Upload Image</p>
                         </div>

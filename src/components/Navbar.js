@@ -1,13 +1,15 @@
 import React, { Fragment } from 'react'
 import Button from './elements/Button'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie';
 
 const Navbar = ({ title, isLoggedIn, setisLoggedIn }) => {
+  const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const logOut = ()=>{
     setisLoggedIn(false);
     removeCookie("authToken");
+    navigate('/login')
   }
   return (
     <Fragment>
@@ -23,10 +25,12 @@ const Navbar = ({ title, isLoggedIn, setisLoggedIn }) => {
           </nav>
           {!isLoggedIn ? <Link to={'/login'}>
             <Button
+            type={'button'}
               text={"Login"}
               arow={true} />
           </Link> :
             <Button
+              type={'button'}
               text={"Log out"}
               onClick={logOut}
               arow={true} />}

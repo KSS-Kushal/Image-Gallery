@@ -20,6 +20,7 @@ const FaceRecognition = () => {
               id={'image'} />
             <div className="my-5 mx-auto flex justify-center">
               <Button
+                type={'submit'}
                 text={'Upload'}
                 arow={false} />
             </div>

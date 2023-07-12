@@ -39,14 +39,13 @@ function App() {
 
   useEffect(() => {
     // Checking if user is not loggedIn
-    console.log(isLoggedIn)
-    if (!isLoggedIn) {
+    if (!cookies.authToken) {
       navigate("/login");
     }
     if(location.pathname === '/signup'){
       navigate("/signup");
     }
-  }, [navigate, isLoggedIn]);
+  }, [navigate]);
   return (
     // <Fragment>
       <Routes>
