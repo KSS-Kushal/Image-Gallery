@@ -9,16 +9,18 @@ import { useNavigate } from 'react-router-dom'
 
 const UploadImage = ({ isLoggedIn, setisLoggedIn }) => {
     const navigate = useNavigate();
-    const [image, setImage] = useState({ image: '', tag:'', formData: new FormData() });
+    const [image, setImage] = useState({ image: '', tag: '', formData: new FormData() });
     const [file, setFile] = useState();
     const [isOpen, setIsOpen] = useState(false);
     const [cookies, setCookie] = useCookies(['user']);
 
     const onChange = (e) => {
-        const {name} = e.target;
-        const value = name==='image'?e.target.files[0]:e.target.value;
+        const { name } = e.target;
+        const value = (name === 'image') ? e.target.files[0] : e.target.value;
         image.formData.set(name, value)
-        setFile(URL.createObjectURL(e.target.files[0]));
+        if (name === 'image') {
+            setFile(URL.createObjectURL(e.target.files[0]));
+        }
         setImage({ ...image, [name]: value });
     }
 
@@ -69,7 +71,7 @@ const UploadImage = ({ isLoggedIn, setisLoggedIn }) => {
                                 type={'button'}
                                 text={'Preview'}
                                 arow={false}
-                                onClick={()=>{setIsOpen(!isOpen)}} />
+                                onClick={() => { setIsOpen(!isOpen) }} />
                             <Button
                                 type={'submit'}
                                 text={'Upload'}
@@ -82,8 +84,8 @@ const UploadImage = ({ isLoggedIn, setisLoggedIn }) => {
             {isOpen && <section className="my-5">
                 <h3 className="text-center text-lg md:text-xl text-dark">Preview</h3>
                 <div className="mx-3 md:mx-auto md:w-4/5 flex flex-col justify-center items-center my-5 md:8">
-                    {file?<img src={file} alt="" className="" />:
-                    <p className='text-base font-medium text-mid-dark'>Please choose an Image to preview...</p>}
+                    {file ? <img src={file} alt="" className="" /> :
+                        <p className='text-base font-medium text-mid-dark'>Please choose an Image to preview...</p>}
                 </div>
             </section>}
             {/* Footer  */}

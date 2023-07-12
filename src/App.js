@@ -34,7 +34,7 @@ function App() {
     if (cookies.authToken) {
       checkLogin();
     }
-  }, [navigate])
+  }, [navigate, isLoggedIn])
 
 
   useEffect(() => {

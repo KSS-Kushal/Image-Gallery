@@ -24,7 +24,7 @@ const Image = ({ url, id }) => {
         <Fragment>
             <div className="relative">
                 <div className="">
-                    <img alt="gallery" className="inset-0 w-full h-full object-cover object-center" src={url} />
+                    <img alt="gallery" className="inset-0 object-cover object-center" src={url} style={{width:450, height:300}} />
                 </div>
                 <div className="px-5 py-3 absolute left-0 top-0 w-full z-10 flex justify-end opacity-0 hover:opacity-100">
                     <AiFillDelete className='text-normal text-2xl cursor-pointer' onClick={deleteImage} />

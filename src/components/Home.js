@@ -4,13 +4,19 @@ import Navbar from './Navbar'
 import Image from './Image'
 import { useCookies } from 'react-cookie';
 import { BiSolidCloudUpload } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import SearchBar from './elements/SearchBar';
+import Button from './elements/Button';
 
 const Home = ({ user, isLoggedIn, setisLoggedIn }) => {
+    const navigate = useNavigate();
     const [cookies, setCookie] = useCookies(['user']);
     const [images, setImages] = useState([]);
 
+    const [search, setSearch] = useState();
+
     useEffect(() => {
+        console.log("run")
         const getAllImage = async () => {
             const url = "http://localhost:5000/api/image/images";
             const response = await fetch(url, {
@@ -25,12 +31,33 @@ const Home = ({ user, isLoggedIn, setisLoggedIn }) => {
                 setImages(data.images);
             }
         }
-        if (isLoggedIn) {
+        if (cookies.authToken) {
             if (cookies.authToken) {
                 getAllImage();
+                console.log(images)
             }
         }
-    }, [])
+    }, [navigate])
+
+
+    const onChange = (e) => {
+        setSearch(e.target.value);
+    }
+
+    const searchImage = async () => {
+        const url = "http://localhost:5000/api/image/images/" + search;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': "application/json",
+                    "auth-token": cookies.authToken
+                }
+            });
+            let data = await response.json();
+            if (data.success) {
+                setImages(data.images);
+            }
+    }
 
     return (
         <Fragment>
@@ -38,10 +65,31 @@ const Home = ({ user, isLoggedIn, setisLoggedIn }) => {
             <Navbar title={"Image Gallery"} isLoggedIn={isLoggedIn} setisLoggedIn={setisLoggedIn} />
             {/* Home  */}
             <section className="body-font">
-                <div className="container px-5 py-16 mx-auto">
+                <div className="container px-5 py-10 mx-auto">
                     <div className="flex flex-col text-center w-full mb-20">
-                        <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-dark">Wellcome {user.name}</h1>
+                        <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-dark">{user.name}, Wellcome to Image Gallery</h1>
                         <p className="lg:w-2/3 mx-auto leading-relaxed text-base">Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep jianbing selfies heirloom.</p>
+                    </div>
+                    {/* Search Image */}
+                    <div className="flex justify-end my-5">
+                    <div className="flex justify-between">
+                        <SearchBar
+                            name={'tag'}
+                            placeholder={'Search Image'}
+                            isRequired={true}
+                            bgColor={'bg-light/20'}
+                            color={'text-normal'}
+                            borderColor={'border-mid-dark'}
+                            border={true}
+                            onChange={onChange}
+                            value={search} />
+                        <Button
+                            type={'button'}
+                            text={"Search"}
+                            onClick={searchImage}
+                            arow={true}
+                            m={'mt-0'} />
+                    </div>
                     </div>
                     {/* Show images */}
                     <div className="grid gap-2 grid-cols-auto -m-4">

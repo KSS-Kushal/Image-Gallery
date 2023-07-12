@@ -36,7 +36,6 @@ const Login = ({ isLoggedIn, setisLoggedIn }) => {
             setCookie("authToken", data.authToken);
             setisLoggedIn(true);
             navigate("/");
-            navigate(0);
         }
     }
 
