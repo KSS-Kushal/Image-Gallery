@@ -33,19 +33,15 @@ function App() {
     }
     if (cookies.authToken) {
       checkLogin();
-    }
-  }, [navigate, isLoggedIn])
-
-
-  useEffect(() => {
-    // Checking if user is not loggedIn
-    if (!cookies.authToken) {
+    }else if (!cookies.authToken) {
       navigate("/login");
     }
     if(location.pathname === '/signup'){
       navigate("/signup");
     }
-  }, [navigate]);
+  }, [navigate, isLoggedIn])
+
+
   return (
     // <Fragment>
       <Routes>

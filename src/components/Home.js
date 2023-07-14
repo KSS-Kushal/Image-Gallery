@@ -45,7 +45,8 @@ const Home = ({ user, isLoggedIn, setisLoggedIn }) => {
     }
 
     const searchImage = async () => {
-        const url = "http://localhost:5000/api/image/images/" + search;
+        const tag = search.toLowerCase();
+        const url = "http://localhost:5000/api/image/images/" + tag;
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
