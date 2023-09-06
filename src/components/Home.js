@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import Footer from './Footer'
 import Navbar from './Navbar'
 import Image from './Image'
@@ -7,37 +7,51 @@ import { BiSolidCloudUpload } from 'react-icons/bi';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from './elements/SearchBar';
 import Button from './elements/Button';
+import ImageContext from '../context/images/imageContext';
+import AuthContext from '../context/auths/authContext';
 
-const Home = ({ user, isLoggedIn, setisLoggedIn }) => {
+const Home = ({ isLoggedIn, setisLoggedIn }) => {
     const navigate = useNavigate();
-    const [cookies, setCookie] = useCookies(['user']);
-    const [images, setImages] = useState([]);
+    const context = useContext(ImageContext);
+    const {images, getAllImage, searchImageByTag} = context;
+    // const [cookies, setCookie] = useCookies(['user']);
+    const {user, token, getUser} = useContext(AuthContext);
+    // const [images, setImages] = useState([]);
 
     const [search, setSearch] = useState();
 
+    // useEffect(() => {
+    //     console.log("run")
+    //     const getAllImage = async () => {
+    //         const url = "http://localhost:5000/api/image/images";
+    //         const response = await fetch(url, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': "application/json",
+    //                 "auth-token": cookies.authToken
+    //             }
+    //         });
+    //         let data = await response.json();
+    //         if (data.success) {
+    //             setImages(data.images);
+    //         }
+    //     }
+    //     if (cookies.authToken) {
+    //         if (cookies.authToken) {
+    //             getAllImage();
+    //             console.log(images)
+    //         }
+    //     }
+    // }, [navigate])
+
     useEffect(() => {
-        console.log("run")
-        const getAllImage = async () => {
-            const url = "http://localhost:5000/api/image/images";
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': "application/json",
-                    "auth-token": cookies.authToken
-                }
-            });
-            let data = await response.json();
-            if (data.success) {
-                setImages(data.images);
-            }
-        }
-        if (cookies.authToken) {
-            if (cookies.authToken) {
-                getAllImage();
-                console.log(images)
-            }
-        }
-    }, [navigate])
+      if (token) {
+        getAllImage();
+      }else if(localStorage.getItem('authToken')){
+        getUser(localStorage.getItem('authToken'));
+      }
+    }, [navigate,token])
+    
 
 
     const onChange = (e) => {
@@ -46,18 +60,20 @@ const Home = ({ user, isLoggedIn, setisLoggedIn }) => {
 
     const searchImage = async () => {
         const tag = search.toLowerCase();
-        const url = "http://localhost:5000/api/image/images/" + tag;
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': "application/json",
-                    "auth-token": cookies.authToken
-                }
-            });
-            let data = await response.json();
-            if (data.success) {
-                setImages(data.images);
-            }
+        // const url = "http://localhost:5000/api/image/images/" + tag;
+        //     const response = await fetch(url, {
+        //         method: 'GET',
+        //         headers: {
+        //             'Content-Type': "application/json",
+        //             // "auth-token": cookies.authToken,
+        //             "auth-token": localStorage.getItem('authToken'),
+        //         }
+        //     });
+        //     let data = await response.json();
+        //     if (data.success) {
+        //         setImages(data.images);
+        //     }
+        searchImageByTag(tag);
     }
 
     return (

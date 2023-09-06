@@ -1,15 +1,20 @@
-import React, { Fragment } from 'react'
-import Button from './elements/Button'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { Fragment, useContext } from 'react';
+import Button from './elements/Button';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import AuthContext from '../context/auths/authContext';
 
-const Navbar = ({ title, isLoggedIn, setisLoggedIn }) => {
+const Navbar = ({ title }) => {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const location = useLocation();
+  const {pathname} = location;
+  // const [cookies, setCookie, removeCookie] = useCookies(['user']);
+  const {isLogin, logoutUser} = useContext(AuthContext);
   const logOut = ()=>{
-    setisLoggedIn(false);
-    removeCookie("authToken");
-    navigate('/login')
+    logoutUser();
+    // removeCookie("authToken");
+    localStorage.removeItem('authToken');
+    navigate('/login');
   }
   return (
     <Fragment>
@@ -19,11 +24,11 @@ const Navbar = ({ title, isLoggedIn, setisLoggedIn }) => {
             <span className="ml-3 text-2xl hover:text-normal cursor-pointer">{title}</span>
           </Link>
           <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-xl justify-center">
-            <Link to={'/'} className="mr-5 hover:text-dark text-mid-dark cursor-pointer">Home</Link>
-            <Link to={'/facerecognition'} className="mr-5 hover:text-dark text-mid-dark cursor-pointer">Face Recognition</Link>
-            <Link to={'/about'} className="mr-5 hover:text-dark text-mid-dark cursor-pointer">About</Link>
+            <Link to={'/'} className={`mr-5 hover:text-dark ${pathname==='/'?"text-dark":"text-mid-dark"} cursor-pointer`}>Home</Link>
+            <Link to={'/facerecognition'} className={`mr-5 hover:text-dark ${pathname==='/facerecognition'?"text-dark":"text-mid-dark"} cursor-pointer`}>Face Recognition</Link>
+            <Link to={'/about'} className={`mr-5 hover:text-dark ${pathname==='/about'?"text-dark":"text-mid-dark"} cursor-pointer`}>About</Link>
           </nav>
-          {!isLoggedIn ? <Link to={'/login'}>
+          {!isLogin ? <Link to={'/login'}>
             <Button
             type={'button'}
               text={"Login"}

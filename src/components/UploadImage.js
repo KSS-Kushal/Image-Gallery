@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useContext, useState } from 'react'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import FileUpload from './elements/FileUpload'
@@ -6,6 +6,7 @@ import Button from './elements/Button'
 import Input from './elements/Input'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
+import ImageContext from '../context/images/imageContext'
 
 const UploadImage = ({ isLoggedIn, setisLoggedIn }) => {
     const navigate = useNavigate();
@@ -13,6 +14,7 @@ const UploadImage = ({ isLoggedIn, setisLoggedIn }) => {
     const [file, setFile] = useState();
     const [isOpen, setIsOpen] = useState(false);
     const [cookies, setCookie] = useCookies(['user']);
+    const {uploadImage} = useContext(ImageContext);
 
     const onChange = (e) => {
         const { name } = e.target;
@@ -27,19 +29,26 @@ const UploadImage = ({ isLoggedIn, setisLoggedIn }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const url = "http://localhost:5000/api/image/upload";
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'auth-token': cookies.authToken
-            },
-            body: image.formData
-        });
-        let data = await response.json();
-        if (data.success) {
-            navigate(0);
-            alert('Successfullly Uploaded')
-        }
+        // const url = "http://localhost:5000/api/image/upload";
+        // const response = await fetch(url, {
+        //     method: 'POST',
+        //     headers: {
+        //         'auth-token': cookies.authToken
+        //     },
+        //     body: image.formData
+        // });
+        // let data = await response.json();
+        // if (data.success) {
+        //     navigate(0);
+        //     alert('Successfullly Uploaded')
+        // }
+        uploadImage(image.formData).then((data)=>{
+            if (data) {
+                console.log(data,'data')
+                navigate(0);
+                alert('Successfullly Uploaded');
+            }
+        })
     }
 
     return (

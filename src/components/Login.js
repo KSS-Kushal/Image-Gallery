@@ -1,14 +1,16 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import FormButton from './elements/FormButton';
 import Input from './elements/Input';
 import { useCookies } from 'react-cookie';
+import AuthContext from '../context/auths/authContext';
 
-const Login = ({ isLoggedIn, setisLoggedIn }) => {
+const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-    const [cookies, setCookie] = useCookies(['user']);
+    // const [cookies, setCookie] = useCookies(['user']);
+    const {loginUser} = useContext(AuthContext);
 
     const onChange = (e) => {
         if (e.target.name === 'email') {
@@ -20,23 +22,17 @@ const Login = ({ isLoggedIn, setisLoggedIn }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const url = "http://localhost:5000/api/auth/login";
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': "application/json"
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
-        });
-        let data = await response.json();
-        if (data.success) {
-            setCookie("authToken", data.authToken);
-            setisLoggedIn(true);
-            navigate("/");
-        }
+        loginUser(email, password).then((authToken)=>{
+            console.log(authToken,'loauth');
+            localStorage.setItem('authToken',authToken);
+            navigate('/');
+    });
+        // if (authToken) {
+        //     // setCookie("authToken", authToken);
+        //     console.log(authToken,'loauth');
+        //     localStorage.setItem('authToken',authToken);
+        //     navigate('/');
+        // }
     }
 
     // useEffect(() => {
